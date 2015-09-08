@@ -21,4 +21,12 @@ class AccountController {
     def Account getByEmail(String email) {
         return mongoAccountAccess.getByEmail(email)
     }
+
+    def Account getByAuthDetails(authDetails) {
+        def account = getByEmail(authDetails.email)
+        if (account == null || account.password != authDetails.pwd) {
+            return null
+        }
+        account
+    }
 }

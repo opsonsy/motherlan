@@ -1,10 +1,15 @@
 package si.opeyemisonu
 
 import com.mongodb.DB
+import groovy.json.JsonBuilder
+import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
+import org.jongo.Jongo
 import si.opeyemisonu.access.AccountAccess
+import si.opeyemisonu.access.AuthSessionAccess
 import si.opeyemisonu.access.MongoFactory
 import si.opeyemisonu.controller.AccountController
+import si.opeyemisonu.controller.AuthSessionController
 import si.opeyemisonu.model.Account
 
 import javax.servlet.http.HttpServletResponse
@@ -15,8 +20,9 @@ import static spark.Spark.*
 class Application {
     
     public static void main(String[] args) {
-        final DB db = MongoFactory.getDB("localhost", 27017, "motherlan")
-        final AccountController accountController = new AccountController(new AccountAccess(db))
+        final Jongo jongo = new Jongo(MongoFactory.getDB("localhost", 27017, "motherlan"))
+        final AccountController accountController = new AccountController(new AccountAccess(jongo))
+        final AuthSessionController authSessionController = new AuthSessionController(new AuthSessionAccess(jongo))
         def jsonSlurper = new JsonSlurper()
         
         port(9090)
@@ -41,16 +47,21 @@ class Application {
             return account._id
         })
         
-        get("/login", {req, res ->
+        post("/auth", {req, res ->
             def loginReq = jsonSlurper.parseText(req.body())
-            def account = accountController.getByEmail(loginReq.email)
-            if(account == null || account.password != loginReq.pwd) {
+            def account = accountController.getByAuthDetails(loginReq)
+            if(account == null) {
                 res.status(SC_BAD_REQUEST)
                 return "BAD_REQUEST"
             } else {
+                def authSession = authSessionController.createSession(account)
                 res.status(SC_OK)
                 res.type("application/json")
-                return account
+                def json = new JsonBuilder()
+                json {
+                    token authSession.token
+                }
+                return json.toString()
             }
             
         })

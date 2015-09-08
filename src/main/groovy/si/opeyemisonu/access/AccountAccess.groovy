@@ -8,8 +8,7 @@ import si.opeyemisonu.model.Account
 
 class AccountAccess {
     private static String COLLECTION_NAME = 'account'
-    
-    private Jongo jongo
+
     private MongoCollection accountCollection 
 
     AccountAccess(DB mongoDB) {
@@ -17,7 +16,6 @@ class AccountAccess {
     }
 
     AccountAccess(Jongo jongo) {
-        this.jongo = jongo
         this.accountCollection = jongo.getCollection(COLLECTION_NAME)
     }
 
