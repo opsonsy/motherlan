@@ -26,6 +26,8 @@ class Application {
         def jsonSlurper = new JsonSlurper()
         
         port(9090)
+
+        staticFileLocation("/public")
         
         get("/accounts/:id", {req, res -> 
             def id = req.params("id")
@@ -63,8 +65,9 @@ class Application {
                 }
                 return json.toString()
             }
-            
         })
+
+        
         
         
     }
