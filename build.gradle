@@ -11,7 +11,7 @@ repositories {
 
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.4.1'
-    compile 'com.sparkjava:spark-core:2.2'
+    compile 'com.sparkjava:spark-core:2.3'
     compile 'org.jongo:jongo:1.2'
     compile 'org.mongodb:mongo-java-driver:3.0.2'
     testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
