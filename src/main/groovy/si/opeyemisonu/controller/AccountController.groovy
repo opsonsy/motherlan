@@ -29,4 +29,8 @@ class AccountController {
         }
         account
     }
+    
+    def getAll() {
+        return mongoAccountAccess.getAll()
+    }
 }

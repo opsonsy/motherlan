@@ -41,6 +41,18 @@ class Application {
                 return account
             }
         })
+
+        get("/accounts", {req, res ->
+            def accounts = accountController.getAll()
+            if(accounts == null) {
+                res.status(SC_BAD_REQUEST)
+                return "BAD_REQUEST"
+            } else {
+                res.status(SC_OK)
+                res.type("application/json")
+                return accounts
+            }
+        })
         
         post("/accounts", {req, res -> 
             def account = new Account(jsonSlurper.parseText(req.body()))
@@ -71,8 +83,16 @@ class Application {
             
             
         })
-
         
+        post("/reset", {req, res ->
+            def email = req.body()
+            res.status(201)
+            return email
+        })
+
+        post("/test", {req, res ->
+//            res.status(201)
+        })        
         
         
     }
