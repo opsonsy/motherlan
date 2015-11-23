@@ -3,10 +3,30 @@ version '1.0-SNAPSHOT'
 
 apply plugin: 'groovy'
 apply plugin: 'java'
+apply plugin: 'idea'
 
 repositories {
     mavenCentral()
     maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
+}
+
+jar {
+    def vendor = "Opeyemi Sonusi"
+    manifest {
+        attributes(
+                "Specification-Title": description,
+                "Specification-Version": version,
+                "Specification-Vendor": vendor,
+                "Implementation-Title": group,
+                "Implementation-Version": version,//ideally this is the git abbreviated id or TeamCity build #
+                "Implementation-Vendor": vendor,
+                "Main-Class": 'si.opeyemisonu.Application'
+        )
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
 
 dependencies {
