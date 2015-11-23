@@ -1,0 +1,16 @@
+motherlan:
+  build: .
+  expose:
+   - "9090"
+   - "9010"
+  ports:
+   - "9090:9090"
+   - "9010:9010"
+  links:
+   - db
+db:
+  image: opsonsy/mng
+  ports:
+   - "28017:27017"
+  volumes_from:
+   - mongodata
