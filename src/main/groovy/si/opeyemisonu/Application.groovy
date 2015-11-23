@@ -25,7 +25,7 @@ class Application {
         final AuthSessionController authSessionController = new AuthSessionController(new AuthSessionAccess(jongo))
         def jsonSlurper = new JsonSlurper()
         
-        port(9090)
+        port(9010)
 
         staticFileLocation("/public")
         
@@ -61,7 +61,7 @@ class Application {
             return account._id
         })
         
-        post("/auth", {req, res ->
+        post("/login", {req, res ->
             def loginReq = jsonSlurper.parseText(req.body())
             def account = accountController.getByAuthDetails(loginReq)
             if(account == null) {
@@ -90,9 +90,36 @@ class Application {
             return email
         })
 
+        get("/reset", {req, res ->
+            return "blah "
+        })
+
+        options("/reset", {req, res ->
+           res.header('Access-Control-Allow-Origin', "*")
+            return res
+        })
+        
         post("/test", {req, res ->
-//            res.status(201)
+ 
         })        
+        
+        before({req, res ->
+            res.header("Access-Control-Allow-Origin", "*")
+        })
+        
+        options("/*", {request, response ->
+            String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
+            if (accessControlRequestHeaders != null) {
+                response.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
+            }
+
+            String accessControlRequestMethod = request.headers("Access-Control-Request-Method");
+            if(accessControlRequestMethod != null){
+                response.header("Access-Control-Allow-Methods", accessControlRequestMethod);
+            }
+
+            return "OK";
+        })
         
         
     }
