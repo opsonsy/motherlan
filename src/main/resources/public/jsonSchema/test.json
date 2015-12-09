@@ -1,0 +1,10 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "test",
+  "type": "object",
+  "required": [ "name", "pet" ],
+  "properties": {
+    "name": {"type": "string"},
+    "pet": { "enum": ["dog", "cat", "bird"] }
+  }
+}
